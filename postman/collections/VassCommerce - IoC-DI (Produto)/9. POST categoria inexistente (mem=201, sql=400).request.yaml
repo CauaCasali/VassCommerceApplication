@@ -1,0 +1,17 @@
+$kind: http-request
+description: "Demonstra a diferenca entre implementacoes: mem aceita (201); sql valida a categoria (400)."
+url: "{{baseUrl}}/produto"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "nome": "Mouse Gamer",
+      "descricao": "Mouse 12000 dpi",
+      "fotoUrl": "https://exemplo.com/mouse.png",
+      "valorUnitario": 129.9,
+      "categoriaId": 9999
+    }
+order: 9000

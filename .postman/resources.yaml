@@ -1,0 +1,15 @@
+# Use this workspace to collaborate
+workspace:
+  id: bb6a5124-f807-4e47-822a-bf5adeb542d6
+
+# Each entry here maps a local resource to one or more corresponding objects in Postman Cloud
+
+cloudResources:
+  collections:
+    ../postman/collections/VassCommerce - IoC-DI (Produto): 8a4626bb-609c-4ce6-a40f-cce260a71087
+
+# All resources in the `postman/` folder are automatically registered in Local View.
+# Point to additional files outside the `postman/` folder to register them individually. Example:
+#localResources:
+#  collections:
+#    - ../tests/E2E Test Collection/

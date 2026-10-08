@@ -1,0 +1,335 @@
+{
+  "info": {
+    "name": "VassCommerce - IoC/DI (Produto)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Rode a API com profile mem e depois com profile sql e compare as respostas (itens 9 e 10)."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "produtoId",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. POST criar produto valido (201)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/produto",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produto"
+          ]
+        },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Mouse Gamer\",\n  \"descricao\": \"Mouse 12000 dpi\",\n  \"fotoUrl\": \"https://exemplo.com/mouse.png\",\n  \"valorUnitario\": 129.9,\n  \"categoriaId\": 1\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 201', () => pm.response.to.have.status(201));",
+              "pm.test('tem Location', () => pm.response.to.have.header('Location'));",
+              "const j = pm.response.json(); pm.collectionVariables.set('produtoId', j.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. GET produto criado (200)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/produto/{{produtoId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produto",
+            "{{produtoId}}"
+          ]
+        },
+        "description": ""
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. GET produto inexistente (404)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/produto/999999",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produto",
+            "999999"
+          ]
+        },
+        "description": ""
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 404', () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. POST invalido - campos (400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/produto",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produto"
+          ]
+        },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"\",\n  \"valorUnitario\": -5\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 400', () => pm.response.to.have.status(400));",
+              "pm.test('erro padronizado', () => { const j = pm.response.json(); pm.expect(j).to.have.property('status', 400); pm.expect(j).to.have.property('campos'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. POST JSON malformado (400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/produto",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produto"
+          ]
+        },
+        "description": "",
+        "body": {
+          "mode": "raw",
+          "raw": "{nome:"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 400', () => pm.response.to.have.status(400));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. GET id nao numerico (400)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/produto/abc",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produto",
+            "abc"
+          ]
+        },
+        "description": ""
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 400', () => pm.response.to.have.status(400));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. GET listar com filtros (200)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/produto?nome=mouse&valorMinimo=10&valorMaximo=500",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produto"
+          ],
+          "query": [
+            {
+              "key": "nome",
+              "value": "mouse"
+            },
+            {
+              "key": "valorMinimo",
+              "value": "10"
+            },
+            {
+              "key": "valorMaximo",
+              "value": "500"
+            }
+          ]
+        },
+        "description": ""
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 200', () => pm.response.to.have.status(200));",
+              "pm.test('e array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. GET listar todos (200)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/produto",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produto"
+          ]
+        },
+        "description": ""
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "9. POST categoria inexistente (mem=201, sql=400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/produto",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produto"
+          ]
+        },
+        "description": "Demonstra a diferenca entre implementacoes: mem aceita (201); sql valida a categoria (400).",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Mouse Gamer\",\n  \"descricao\": \"Mouse 12000 dpi\",\n  \"fotoUrl\": \"https://exemplo.com/mouse.png\",\n  \"valorUnitario\": 129.9,\n  \"categoriaId\": 9999\n}"
+        }
+      }
+    },
+    {
+      "name": "10. GET /produto/1 (mem=404 antes de criar, sql=200 do seed)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/produto/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produto",
+            "1"
+          ]
+        },
+        "description": "Rode com cada profile e compare a resposta."
+      }
+    }
+  ]
+}

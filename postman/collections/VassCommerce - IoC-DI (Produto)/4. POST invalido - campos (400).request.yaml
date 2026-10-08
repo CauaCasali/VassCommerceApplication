@@ -1,0 +1,19 @@
+$kind: http-request
+url: "{{baseUrl}}/produto"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "nome": "",
+      "valorUnitario": -5
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('status 400', () => pm.response.to.have.status(400));
+      pm.test('erro padronizado', () => { const j = pm.response.json(); pm.expect(j).to.have.property('status', 400); pm.expect(j).to.have.property('campos'); });
+    language: text/javascript
+order: 4000

@@ -1,0 +1,14 @@
+$kind: http-request
+url: "{{baseUrl}}/produto?nome=mouse&valorMinimo=10&valorMaximo=500"
+method: GET
+queryParams:
+  nome: mouse
+  valorMinimo: "10"
+  valorMaximo: "500"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('status 200', () => pm.response.to.have.status(200));
+      pm.test('e array', () => pm.expect(pm.response.json()).to.be.an('array'));
+    language: text/javascript
+order: 7000

@@ -1,0 +1,6 @@
+$kind: http-request
+name: 10. GET /produto/1 (mem=404 antes de criar, sql=200 do seed)
+description: Rode com cada profile e compare a resposta.
+url: "{{baseUrl}}/produto/1"
+method: GET
+order: 10000

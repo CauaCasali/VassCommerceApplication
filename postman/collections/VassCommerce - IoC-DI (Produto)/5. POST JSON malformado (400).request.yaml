@@ -1,0 +1,13 @@
+$kind: http-request
+url: "{{baseUrl}}/produto"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: "{nome:"
+scripts:
+  - type: afterResponse
+    code: pm.test('status 400', () => pm.response.to.have.status(400));
+    language: text/javascript
+order: 5000

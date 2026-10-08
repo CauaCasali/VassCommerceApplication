@@ -1,0 +1,23 @@
+$kind: http-request
+url: "{{baseUrl}}/produto"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "nome": "Mouse Gamer",
+      "descricao": "Mouse 12000 dpi",
+      "fotoUrl": "https://exemplo.com/mouse.png",
+      "valorUnitario": 129.9,
+      "categoriaId": 1
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('status 201', () => pm.response.to.have.status(201));
+      pm.test('tem Location', () => pm.response.to.have.header('Location'));
+      const j = pm.response.json(); pm.collectionVariables.set('produtoId', j.id);
+    language: text/javascript
+order: 1000

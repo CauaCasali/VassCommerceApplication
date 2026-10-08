@@ -1,0 +1,6 @@
+$kind: collection
+name: VassCommerce - IoC/DI (Produto)
+description: Rode a API com profile mem e depois com profile sql e compare as respostas (itens 9 e 10).
+variables:
+  baseUrl: http://localhost:8080
+  produtoId: "1"
